@@ -4,12 +4,13 @@ chrome.tabs.onUpdated.addListener((tabId, tab) => {
     // https://www.youtube.com/watch?v=UJ7QhP2_0-4
     const queryParameters = tab.url.split("?")[1];
     const urlParameters = new URLSearchParams(queryParameters);
+    // console.log(urlParameters);
 
     // extension components can talk to each other
     // send the tabId to contentScript.js
     chrome.tabs.sendMessage(tabId, {
       type: "NEW",
-      videoId: urlParameters.get("v");
+      videoId: urlParameters.get("v"),
     });
   }
 });
