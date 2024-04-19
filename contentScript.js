@@ -1,6 +1,7 @@
 (() => {
   let youtubeLeftControls, youtubePlayer;
   let currentVideo = "";
+  let currentVideoBookmarks = [];
   // listen to background.js
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
     // deconstruct the message
@@ -35,5 +36,30 @@
     }
   };
 
+  const addNewBookmarkEventHandler = () => {
+    // Returns current time of youtube player in seconds
+    const currentTime = youtubePlayer.currentTime;
+    const newBookmark = {
+      time: currentTime,
+      desc: "Bookmark at " + getTime(currentTime),
+    };
+    console.log(newBookmark);
+
+    chrome.storage.sync.set({
+      [currentVideo]: JSON.stringify(
+        [...currentVideoBookmarks, newBookmark].sort(
+          (a, (b) => a.time - b.time)
+        )
+      ),
+    });
+  };
+
   newVideoLoaded();
 })();
+
+const getTime = (t) => {
+  // Convert seconds to standard time format
+  var date = new Date(0);
+  date.setSeconds(t);
+  return date.toISOString().substr(11, 8);
+};
