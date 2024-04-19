@@ -14,14 +14,23 @@
     }
   });
 
+  // get saved bookmarks from chrome storage
+  const fetchBookmarks = () => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get([currentVideo], (obj) => {
+        resolve(obj[currentVideo] ? JSON.parse(obj[currentVideo]) : []);
+      });
+    });
+  };
+
   const newVideoLoaded = async () => {
     const bookmarkBtnExists =
       document.getElementsByClassName("bookmark-btn")[0];
-    // console.log(bookmarkBtnExists);
 
     // add a bookmark button to the page
     if (!bookmarkBtnExists) {
       const bookmarkBtn = document.createElement("img");
+      currentVideoBookmarks = await fetchBookmarks();
 
       bookmarkBtn.src = chrome.runtime.getURL("assets/bookmark.png");
       bookmarkBtn.className = "ytp-button " + "bookmark-btn";
@@ -36,15 +45,18 @@
     }
   };
 
-  const addNewBookmarkEventHandler = () => {
+  const addNewBookmarkEventHandler = async () => {
     // Returns current time of youtube player in seconds
     const currentTime = youtubePlayer.currentTime;
     const newBookmark = {
       time: currentTime,
       desc: "Bookmark at " + getTime(currentTime),
     };
-    console.log(newBookmark);
 
+    // make sure we always have the freshest set of bookmarks
+    currentVideoBookmarks = await fetchBookmarks();
+
+    // save new bookmark to chrome storage
     chrome.storage.sync.set({
       [currentVideo]: JSON.stringify(
         [...currentVideoBookmarks, newBookmark].sort(
