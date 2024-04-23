@@ -66,7 +66,8 @@
     // for currentVideo
     currentVideoBookmarks = await fetchBookmarks();
 
-    // save new bookmark to chrome storage
+    // save new bookmark to chrome storage, and
+    // sort by time in ascending order
     chrome.storage.sync.set({
       [currentVideo]: JSON.stringify(
         [...currentVideoBookmarks, newBookmark].sort((a, b) => a.time - b.time)
