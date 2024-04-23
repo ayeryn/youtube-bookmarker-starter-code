@@ -7,7 +7,6 @@ import { getActiveTabURL } from "./utils.js";
  *
  */
 const addNewBookmark = (bookmark) => {
-  // console.log(typeof bookmark);
   return `<div class='bookmark'>${bookmark.desc}<div>`;
 };
 
@@ -20,9 +19,13 @@ const viewBookmarks = (currentVideoBookmarks) => {
   const bookmarks = document.getElementById("bookmarks");
   // Initialize to empty
   bookmarks.innerHTML = "";
-  for (let i = 0; i < currentVideoBookmarks.length; i++) {
-    const bookmark = currentVideoBookmarks[i];
-    bookmarks.innerHTML += addNewBookmark(bookmark);
+  if (currentVideoBookmarks.length > 0) {
+    for (let i = 0; i < currentVideoBookmarks.length; i++) {
+      const bookmark = currentVideoBookmarks[i];
+      bookmarks.innerHTML += addNewBookmark(bookmark);
+    }
+  } else {
+    bookmarks.innerHTML = "No bookmarks for this video.";
   }
 };
 
