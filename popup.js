@@ -47,7 +47,21 @@ const onPlay = (e) => {};
 
 const onDelete = (e) => {};
 
-const setBookmarkAttributes = () => {};
+/**
+ * Sets bookmark attributes for a control element.
+ * @param {string} src - The attribute, e.g. play, pause, delete.
+ * @param {function} eventListener - The event listener function to be attached to the control element.
+ * @param {HTMLElement} controlParentElement - The parent element to which the control element will be appended.
+ * @returns {void}
+ */
+const setBookmarkAttributes = (src, eventListener, controlParentElement) => {
+  const controlElement = document.createElement("img");
+
+  controlElement.src = "assets/" + src + ".png";
+  controlElement.title = src;
+  controlElement.addEventListener("click", eventListener);
+  controlParentElement.appendChild(controlElement);
+};
 
 /**
  * Adds an event listener for the "DOMContentLoaded" event and performs actions based on the current tab URL.
