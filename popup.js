@@ -24,14 +24,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Check if current tab is Youtube
   if (activeTab.url.includes("youtube.com/watch") && currentVideo) {
-    // (data) -> {currentVideo: [bookmarks]}
-    // Note: clear caches doesn't clear chrome.storage
+    /**
+     * Retrieves the bookmarks for the current video from the Chrome sync storage.
+     *
+     * @param {string} currentVideo - The key used to retrieve the bookmarks for the current video.
+     * @param {function} callback - The callback function to be executed after retrieving the bookmarks.
+     * (data) -> {currentVideo: [bookmarks]}
+     *
+     * NOTE: clear caches doesn't clear chrome.storage
+     */
     chrome.storage.sync.get([currentVideo], (data) => {
       const currentVideoBookmarks = data[currentVideo]
         ? JSON.parse(data[currentVideo])
         : [];
     });
-    console.log("data:", data, "; check content: ", data[currentVideo]);
+    // console.log("data:", data, "; check content: ", data[currentVideo]);
+
+    // Display bookmarks
+    viewBookmarks();
   } else {
     // Display info if not Youtube
     const container = document.getElementsByClassName("container")[0];
