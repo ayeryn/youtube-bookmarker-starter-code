@@ -61,7 +61,6 @@
       time: currentTime,
       desc: "Bookmark at " + getTime(currentTime),
     };
-    console.log("Add new bookmark:", newBookmark);
     // make sure we always have the freshest set of bookmarks
     // for currentVideo
     currentVideoBookmarks = await fetchBookmarks();
