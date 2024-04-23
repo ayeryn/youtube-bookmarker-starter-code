@@ -14,7 +14,10 @@
     }
   });
 
-  // get saved bookmarks from chrome storage
+  /**
+   * Fetches bookmarks from Chrome storage for current video
+   * @returns {Promise<Array>} A promise that resolves to an array of bookmarks.
+   */
   const fetchBookmarks = () => {
     return new Promise((resolve) => {
       chrome.storage.sync.get([currentVideo], (obj) => {
@@ -45,6 +48,12 @@
     }
   };
 
+  /**
+   * Adds a new bookmark to the current video.
+   * @async
+   * @function addNewBookmarkEventHandler
+   * @returns {Promise<void>}
+   */
   const addNewBookmarkEventHandler = async () => {
     // Returns current time of youtube player in seconds
     const currentTime = youtubePlayer.currentTime;
@@ -54,14 +63,13 @@
     };
 
     // make sure we always have the freshest set of bookmarks
+    // for currentVideo
     currentVideoBookmarks = await fetchBookmarks();
 
     // save new bookmark to chrome storage
     chrome.storage.sync.set({
       [currentVideo]: JSON.stringify(
-        [...currentVideoBookmarks, newBookmark].sort(
-          (a, (b) => a.time - b.time)
-        )
+        [...currentVideoBookmarks, newBookmark].sort((a, b) => a.time - b.time)
       ),
     });
   };
