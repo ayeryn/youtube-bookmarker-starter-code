@@ -1,13 +1,27 @@
 import { getActiveTabURL } from "./utils.js";
 
 /**
- * Adds a new bookmark to popup.html.
+ * Adds a new bookmark to the bookmarks element.
  *
- * @param {object} bookmark - The bookmark object to be added.
- *
+ * @param {HTMLElement} bookmarksElement - The element that contains the bookmarks.
+ * @param {Object} bookmark - The bookmark object to be added.
+ * @param {string} bookmark.desc - The description of the bookmark.
+ * @param {string} bookmark.time - The timestamp of the bookmark.
  */
-const addNewBookmark = (bookmark) => {
-  return `<div class='bookmark'>${bookmark.desc}<div>`;
+const addNewBookmark = (bookmarksElement, bookmark) => {
+  const bookmarkTitleElement = document.createElement("div");
+  const newBookmarkElement = document.createElement("div");
+
+  bookmarkTitleElement.textContent = bookmark.desc;
+  bookmarkTitleElement.className = "bookmark-title";
+
+  // make sure id is unique
+  newBookmarkElement.id = "bookmark-" + bookmark.time;
+  newBookmarkElement.className = "bookmark";
+  newBookmarkElement.setAttribute("timestamp", bookmark.time);
+
+  newBookmarkElement.appendChild(bookmarkTitleElement);
+  bookmarksElement.appendChild(newBookmarkElement);
 };
 
 /**
@@ -16,16 +30,16 @@ const addNewBookmark = (bookmark) => {
  * @param {Array} currentVideoBookmarks - The array of bookmarks for the current video.
  */
 const viewBookmarks = (currentVideoBookmarks) => {
-  const bookmarks = document.getElementById("bookmarks");
+  const bookmarksElement = document.getElementById("bookmarks");
   // Initialize to empty
-  bookmarks.innerHTML = "";
+  bookmarksElement.innerHTML = "";
   if (currentVideoBookmarks.length > 0) {
     for (let i = 0; i < currentVideoBookmarks.length; i++) {
       const bookmark = currentVideoBookmarks[i];
-      bookmarks.innerHTML += addNewBookmark(bookmark);
+      addNewBookmark(bookmarksElement, bookmark);
     }
   } else {
-    bookmarks.innerHTML = "No bookmarks for this video.";
+    bookmarks.innerHTML = "<i class='row'>No bookmarks to show.</i>";
   }
 };
 
