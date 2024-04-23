@@ -61,7 +61,7 @@
       time: currentTime,
       desc: "Bookmark at " + getTime(currentTime),
     };
-
+    console.log("Add new bookmark:", newBookmark);
     // make sure we always have the freshest set of bookmarks
     // for currentVideo
     currentVideoBookmarks = await fetchBookmarks();
@@ -82,5 +82,5 @@ const getTime = (t) => {
   // Convert seconds to standard time format
   var date = new Date(0);
   date.setSeconds(t);
-  return date.toISOString().substring(11, 8);
+  return date.toISOString().substring(14, 19);
 };
