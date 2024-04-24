@@ -16,9 +16,11 @@
     const { type, value, videoId } = obj;
 
     if (type === "NEW") {
+      // new bookmark
       currentVideo = videoId;
       newVideoLoaded();
     } else if (type === "PLAY") {
+      // play video from bookmarked timestamp
       youtubePlayer.currentTime = value;
     }
   });

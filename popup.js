@@ -61,11 +61,10 @@ const onPlay = async (e) => {
   const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
   const activeTab = await getActiveTabURL();
 
-  chrome.tabs.sendMessage(activeTab.id),
-    {
-      type: "PLAY",
-      value: bookmarkTime,
-    };
+  chrome.tabs.sendMessage(activeTab.id, {
+    type: "PLAY",
+    value: bookmarkTime,
+  });
 };
 
 const onDelete = (e) => {};
@@ -115,7 +114,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         ? JSON.parse(data[currentVideo])
         : [];
 
-      console.log(currentVideoBookmarks);
       // Add existing bookmarks to html
       viewBookmarks(currentVideoBookmarks);
     });
