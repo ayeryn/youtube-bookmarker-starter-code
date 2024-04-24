@@ -27,8 +27,8 @@ const addNewBookmark = (bookmarksElement, bookmark) => {
   setBookmarkAttributes("delete", onDelete, controlsElement);
 
   newBookmarkElement.appendChild(bookmarkTitleElement);
+  newBookmarkElement.appendChild(controlsElement);
   bookmarksElement.appendChild(newBookmarkElement);
-  bookmarksElement.appendChild(controlsElement);
 };
 
 /**
