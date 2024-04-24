@@ -11,17 +11,24 @@ import { getActiveTabURL } from "./utils.js";
 const addNewBookmark = (bookmarksElement, bookmark) => {
   const bookmarkTitleElement = document.createElement("div");
   const newBookmarkElement = document.createElement("div");
+  const controlsElement = document.createElement("div");
 
   bookmarkTitleElement.textContent = bookmark.desc;
   bookmarkTitleElement.className = "bookmark-title";
+
+  controlsElement.className = "bookmark-controls";
 
   // make sure id is unique
   newBookmarkElement.id = "bookmark-" + bookmark.time;
   newBookmarkElement.className = "bookmark";
   newBookmarkElement.setAttribute("timestamp", bookmark.time);
 
+  setBookmarkAttributes("play", onPlay, controlsElement);
+  setBookmarkAttributes("delete", onDelete, controlsElement);
+
   newBookmarkElement.appendChild(bookmarkTitleElement);
   bookmarksElement.appendChild(newBookmarkElement);
+  bookmarksElement.appendChild(controlsElement);
 };
 
 /**
