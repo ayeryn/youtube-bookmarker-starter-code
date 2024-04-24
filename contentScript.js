@@ -33,6 +33,7 @@
         [currentVideo]: JSON.stringify(currentVideoBookmarks),
       });
 
+      // send response back as param to viewBookmarks
       response(currentVideoBookmarks);
     }
   });
@@ -48,27 +49,39 @@
       });
     });
   };
-
   /**
-   * Performs actions when a new video is loaded.
+   * Function to handle the event when a new video is loaded.
+   * It checks if the bookmark button exists and if not, creates a new bookmark button and appends it to the left controls of the YouTube player.
+   * It also adds an event listener to the bookmark button to handle bookmarking the current timestamp.
    */
   const newVideoLoaded = async () => {
+    // Check if the bookmark button already exists
     const bookmarkBtnExists =
       document.getElementsByClassName("bookmark-btn")[0];
 
     if (!bookmarkBtnExists) {
+      // Create a new bookmark button
       const bookmarkBtn = document.createElement("img");
+
+      // Fetch the current video bookmarks
       currentVideoBookmarks = await fetchBookmarks();
 
+      // Set the source and class name of the bookmark button
       bookmarkBtn.src = chrome.runtime.getURL("assets/bookmark.png");
       bookmarkBtn.className = "ytp-button " + "bookmark-btn";
+
+      // Set the title of the bookmark button
       bookmarkBtn.title = "Click to bookmark current timestamp";
 
+      // Get the left controls and YouTube player elements
       youtubeLeftControls =
         document.getElementsByClassName("ytp-left-controls")[0];
       youtubePlayer = document.getElementsByClassName("video-stream")[0];
 
+      // Append the bookmark button to the left controls
       youtubeLeftControls.appendChild(bookmarkBtn);
+
+      // Add an event listener to the bookmark button
       bookmarkBtn.addEventListener("click", addNewBookmarkEventHandler);
     }
   };
