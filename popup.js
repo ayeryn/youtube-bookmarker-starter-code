@@ -75,20 +75,34 @@ const onPlay = async (e) => {
   });
 };
 
+/**
+ * Handles the delete event for a bookmark.
+ * @param {Event} e - The event object.
+ * @returns {Promise<void>} - A promise that resolves when the delete operation is complete.
+ */
 const onDelete = async (e) => {
+  // Get the bookmark timestamp from the parent node
   const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
-  const activeTab = await getActiveTabURL();
-  console.log("active tab: ", activeTab);
-  const queryParameters = activeTab.url.split("?")[1];
-  const urlParameters = new URLSearchParams(queryParameters);
-  const videoId = urlParameters.get("v");
-  console.log("vid = ", videoId);
 
-  chrome.tabs.sendMessage(activeTab.Id, {
-    type: "DELETE",
-    value: bookmarkTime,
-    videoId: videoId,
-  });
+  // Get the URL of the active tab
+  const activeTab = await getActiveTabURL();
+
+  // Remove from HTML
+  const bookmarkElementToDelete = document.getElementById(
+    "bookmark-" + bookmarkTime
+  );
+  bookmarkElementToDelete.parentNode.removeChild(bookmarkElementToDelete);
+
+  // Send a message to the active tab with the delete request
+  chrome.tabs.sendMessage(
+    activeTab.Id,
+    {
+      type: "DELETE",
+      value: bookmarkTime,
+    },
+    // Reload view
+    viewBookmarks
+  );
 };
 
 /**

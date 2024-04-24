@@ -23,7 +23,17 @@
       // play video from bookmarked timestamp
       youtubePlayer.currentTime = value;
     } else if (type === "DELETE") {
-      // delete bookmark from chrome.storage
+      // delete bookmark and update chrome.storage.sync
+      console.log("current: ", currentVideoBookmarks);
+      currentVideoBookmarks = currentVideoBookmarks.filter(
+        (b) => b.time != value
+      );
+      console.log("updated: ", currentVideoBookmarks);
+      chrome.storage.sync.set({
+        [currentVideo]: JSON.stringify(currentVideoBookmarks),
+      });
+
+      response(currentVideoBookmarks);
     }
   });
 
