@@ -4,13 +4,18 @@
   let currentVideoBookmarks = [];
   // listen to background.js
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
-    // deconstruct the message
+    // deconstruct the message for NEW, PLAY, and DELETE
+    // NEW: {type, videoId}
+    // PLAY: {type, timestamp}
+    // DELETE: {type, timestamp}
     const { type, value, videoId } = obj;
 
     if (type === "NEW") {
       // add bookmark to list
       currentVideo = videoId;
       newVideoLoaded();
+    } else if (type === "PLAY") {
+      youtubePlayer.currentTime = value;
     }
   });
 

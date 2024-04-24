@@ -50,7 +50,23 @@ const viewBookmarks = (currentVideoBookmarks) => {
   }
 };
 
-const onPlay = (e) => {};
+const onPlay = async (e) => {
+  /** * e.target: the element that triggered the event -> play button
+   * e.target.parentNode.parentNode -> bookmark
+   * <div class="bookmark" timestamp="15.124953">
+   * <div class="bookmark-title"/ >
+   * <div class="bookmark-controls" />
+   * </div>
+   */
+  const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
+  const activeTab = await getActiveTabURL();
+
+  chrome.tabs.sendMessage(activeTab.id),
+    {
+      type: "PLAY",
+      value: bookmarkTime,
+    };
+};
 
 const onDelete = (e) => {};
 
