@@ -95,7 +95,7 @@ const onDelete = async (e) => {
 
   // Send a message to the active tab with the delete request
   chrome.tabs.sendMessage(
-    activeTab.Id,
+    activeTab.id,
     {
       type: "DELETE",
       value: bookmarkTime,
