@@ -1,17 +1,21 @@
+/**
+ * This code snippet listens to messages from the background.js file and performs actions based on the message type.
+ */
 (() => {
   let youtubeLeftControls, youtubePlayer;
   let currentVideo = "";
   let currentVideoBookmarks = [];
-  // listen to background.js
+
+  /**
+   * Listens to messages from the background.js file and performs actions based on the message type.
+   * @param {Object} obj - The message object received from the background.js file.
+   * @param {Object} sender - The sender of the message.
+   * @param {Function} response - The response function to send back a response to the background.js file.
+   */
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
-    // deconstruct the message for NEW, PLAY, and DELETE
-    // NEW: {type, videoId}
-    // PLAY: {type, timestamp}
-    // DELETE: {type, timestamp}
     const { type, value, videoId } = obj;
 
     if (type === "NEW") {
-      // add bookmark to list
       currentVideo = videoId;
       newVideoLoaded();
     } else if (type === "PLAY") {
@@ -20,7 +24,7 @@
   });
 
   /**
-   * Fetches bookmarks from Chrome storage for current video
+   * Fetches bookmarks from Chrome storage for the current video.
    * @returns {Promise<Array>} A promise that resolves to an array of bookmarks.
    */
   const fetchBookmarks = () => {
@@ -31,11 +35,13 @@
     });
   };
 
+  /**
+   * Performs actions when a new video is loaded.
+   */
   const newVideoLoaded = async () => {
     const bookmarkBtnExists =
       document.getElementsByClassName("bookmark-btn")[0];
 
-    // add a bookmark button to the page
     if (!bookmarkBtnExists) {
       const bookmarkBtn = document.createElement("img");
       currentVideoBookmarks = await fetchBookmarks();
@@ -55,23 +61,15 @@
 
   /**
    * Adds a new bookmark to the current video.
-   * @async
-   * @function addNewBookmarkEventHandler
-   * @returns {Promise<void>}
    */
   const addNewBookmarkEventHandler = async () => {
-    // Returns current time of youtube player in seconds
     const currentTime = youtubePlayer.currentTime;
     const newBookmark = {
       time: currentTime,
       desc: "Bookmark at " + getTime(currentTime),
     };
-    // make sure we always have the freshest set of bookmarks
-    // for currentVideo
     currentVideoBookmarks = await fetchBookmarks();
 
-    // save new bookmark to chrome storage, and
-    // sort by time in ascending order
     chrome.storage.sync.set({
       [currentVideo]: JSON.stringify(
         [...currentVideoBookmarks, newBookmark].sort((a, b) => a.time - b.time)
