@@ -22,6 +22,8 @@
     } else if (type === "PLAY") {
       // play video from bookmarked timestamp
       youtubePlayer.currentTime = value;
+    } else if (type === "DELETE") {
+      // delete bookmark from chrome.storage
     }
   });
 
@@ -86,5 +88,5 @@ const getTime = (t) => {
   // Convert seconds to standard time format
   var date = new Date(0);
   date.setSeconds(t);
-  return date.toISOString().substring(14, 19);
+  return date.toISOString().substring(11, 19);
 };
